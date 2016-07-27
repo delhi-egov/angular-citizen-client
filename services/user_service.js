@@ -1,61 +1,54 @@
-module.exports = function(backendClient, authInfoService) {
+module.exports = function($state, backendClient, authInfo) {
     return {
         //Does login of user
-        //Stores user data in authInfoService
+        //Stores user data in authInfo
         //Set loginError on controller object in case of error
-        //Calls the callback methods with the response/error data
+        //Takes user to either verify or home page
         login: function(controller, credentials) {
-            var promise = new Promise(function(resolve, reject) {
-                controller.loginError = undefined;
-                backendClient.login(credentials.phone, credentials.password)
-                .then(function(response) {
-                    authInfoService.user = response.data;
-                    resolve(response.data);
-                })
-                .catch(function(response) {
-                    controller.loginError = response.message;
-                    reject(response.message);
-                });
+            controller.loginError = undefined;
+            backendClient.login(credentials.phone, credentials.password)
+            .then(function(response) {
+                authInfo.user = response.data;
+                if(authInfo.user.role === 'UNVERIFIED') {
+                    $state.go('verify');
+                }
+                else {
+                    $state.go('home');
+                }
+            })
+            .catch(function(response) {
+                controller.loginError = response.message;
             });
-            return promise;
         },
         //Does logout of user
-        //Clears user data in authInfoService
+        //Clears user data in authInfo
         //Set logoutError on controller object in case of error
-        //Calls the callback methods with the response/error data
+        //Takes the user to the login page
         logout: function(controller) {
-            var promise = new Promise(function(resolve, reject) {
-                controller.logoutError = undefined;
-                backendClient.logout()
-                .then(function(response) {
-                    authInfoService.user = {};
-                    resolve(response.data);
-                })
-                .catch(function(response) {
-                    controller.logoutError = response.message;
-                    reject(response.message);
-                });
+            controller.logoutError = undefined;
+            backendClient.logout()
+            .then(function(response) {
+                authInfo.user = {};
+                $state.go('login');
+            })
+            .catch(function(response) {
+                controller.logoutError = response.message;
             });
-            return promise;
         },
         //Does registration of user
-        //Stores user data in authInfoService
+        //Stores user data in authInfo
         //Set registerError on controller object in case of error
-        //Calls the callback methods with the response/error data
+        //Takes the user to verify page
         register: function(controller, credentials) {
-            var promise = new Promise(function(resolve, reject) {
-                controller.registerError = undefined;
-                backendClient.register(credentials)
-                .then(function(response) {
-                    authInfoService.user = response.data;
-                    resolve(response.data);
-                })
-                .catch(function(response) {
-                    controller.registerError = response.message;
-                    reject(response.message);
-                });
+            controller.registerError = undefined;
+            backendClient.register(credentials)
+            .then(function(response) {
+                authInfo.user = response.data;
+                $state.go('verify');
+            })
+            .catch(function(response) {
+                controller.registerError = response.message;
             });
-            return promise;
         },
         //Gets logged in user's information
         //Calls the callback methods with the response/error data
@@ -89,29 +82,23 @@ module.exports = function(backendClient, authInfoService) {
             return promise;
         },
         //Checks if the OTP matches the one sent in the SMS
-        //Sets verifyError on the controller object
-        //If OTP match fails, then calls the error callback with error message
-        //Calls the callback methods with the response/error data
+        //Sets verifyError on the controller object in case of error or verification failure
+        //Takes user to home page if verification succeeds
         verifyOtp: function(controller, otp) {
-            var promise = new Promise(function(resolve, reject) {
-                controller.verifyError = undefined;
-                backendClient.verifyOtp(otp)
-                .then(function(response) {
-                    if(response.data) {
-                        resolve(response.data);
-                    }
-                    else {
-                        var message = 'The provided OTP did not match the one sent in SMS';
-                        controller.verifyError = message;
-                        reject(message);
-                    }
-                })
-                .catch(function(response) {
-                    controller.verifyError = response.message;
-                    reject(response.message);
-                });
+            controller.verifyError = undefined;
+            backendClient.verifyOtp(otp)
+            .then(function(response) {
+                if(response.data) {
+                    $state.go('home');
+                }
+                else {
+                    var message = 'The provided OTP did not match the one sent in SMS';
+                    controller.verifyError = message;
+                }
+            })
+            .catch(function(response) {
+                controller.verifyError = response.message;
             });
-            return promise;
         }
     };
 };
