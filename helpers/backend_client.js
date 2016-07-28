@@ -61,6 +61,12 @@ module.exports = function($http, Upload) {
         },
         getStatus: function(applicationId) {
             return $http.get('/api/application/' + applicationId + '/status');
+        },
+        getForms: function(applicationId) {
+            return $http.get('/api/application/' + applicationId + '/forms');
+        },
+        getDocuments: function(applicationId) {
+            return $http.get('/api/application/' + applicationId + '/documents');
         }
     };
 };
