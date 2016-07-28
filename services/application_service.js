@@ -10,6 +10,8 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             backendClient.createApplication(processType)
             .then(function(response) {
                 applicationInfo.application = response.data;
+                applicationInfo.forms = {};
+                applicationInfo.documents = {};
                 $state.go(nextState, {
                     processType: processType,
                     currentStage: nextStage
