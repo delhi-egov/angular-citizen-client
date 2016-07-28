@@ -4,9 +4,9 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             controller.createError = undefined;
             var processType = $state.params.processType;
             var currentStage = $state.params.currentStage;
-            var nextState = processType + '.' + appConfig[processType][currentStage].nextState;
-            var nextStage = appConfig[processType][currentStage].nextStage;
-            var params = appConfig[processType][currentStage].params;
+            var nextState = processType + '.' + appConfig[processType].stages[currentStage].nextState;
+            var nextStage = appConfig[processType].stages[currentStage].nextStage;
+            var params = appConfig[processType].stages[currentStage].params;
             backendClient.createApplication(processType)
             .then(function(response) {
                 applicationInfo.application = response.data;
@@ -24,9 +24,9 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             controller.attachError = undefined;
             var processType = $state.params.processType;
             var currentStage = $state.params.currentStage;
-            var nextState = processType + '.' + appConfig[processType][currentStage].nextState;
-            var nextStage = appConfig[processType][currentStage].nextStage;
-            var params = appConfig[processType][currentStage].params;
+            var nextState = processType + '.' + appConfig[processType].stages[currentStage].nextState;
+            var nextStage = appConfig[processType].stages[currentStage].nextStage;
+            var params = appConfig[processType].stages[currentStage].params;
             backendClient.attachForm(applicationInfo.application.id, params.formType, form)
             .then(function(response) {
                 backendClient.changeStage(applicationInfo.application.id, currentStage)
@@ -50,9 +50,9 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             controller.attachError = undefined;
             var processType = $state.params.processType;
             var currentStage = $state.params.currentStage;
-            var nextState = processType + '.' + appConfig[processType][currentStage].nextState;
-            var nextStage = appConfig[processType][currentStage].nextStage;
-            var params = appConfig[processType][currentStage].params;
+            var nextState = processType + '.' + appConfig[processType].stages[currentStage].nextState;
+            var nextStage = appConfig[processType].stages[currentStage].nextStage;
+            var params = appConfig[processType].stages[currentStage].params;
             backendClient.attachDocument(applicationInfo.application.id, params.documentType, file)
             .then(function(response) {
                 backendClient.changeStage(applicationInfo.application.id, currentStage)
@@ -75,9 +75,9 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
         skip: function(controller) {
             var processType = $state.params.processType;
             var currentStage = $state.params.currentStage;
-            var nextState = processType + '.' + appConfig[processType][currentStage].nextState;
-            var nextStage = appConfig[processType][currentStage].nextStage;
-            var params = appConfig[processType][currentStage].params;
+            var nextState = processType + '.' + appConfig[processType].stages[currentStage].nextState;
+            var nextStage = appConfig[processType].stages[currentStage].nextStage;
+            var params = appConfig[processType].stages[currentStage].params;
             $state.go(nextState, {
                 processType: processType,
                 currentStage: nextStage,
@@ -88,7 +88,7 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             this.completeError = undefined;
             backendClient.complete(applicationInfo.application.id)
             .then(function(response) {
-                applicationInfo.application = response.data;
+                applicationInfo.application = undefined;
                 $state.go('home');
             })
             .catch(function(response) {

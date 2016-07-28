@@ -1,10 +1,12 @@
 module.exports = function($http, Upload) {
     return {
         login: function(phone, password) {
-            return $http.post('/api/user/login', {
-                phone: phone,
-                password: password
-            });
+            var config = {
+                headers: {
+                    "Authorization" : "Basic " + window.btoa(phone + ":" + password)
+                }
+            };
+            return $http.post('/api/user/login', {}, config);
         },
         logout: function() {
             return $http.post('/api/user/logout', {});
@@ -55,7 +57,7 @@ module.exports = function($http, Upload) {
             });
         },
         getApplications: function() {
-            return $http.get('/api/applications');
+            return $http.get('/api/applications/');
         },
         getStatus: function(applicationId) {
             return $http.get('/api/application/' + applicationId + '/status');
