@@ -15,8 +15,7 @@ module.exports = function($state, backendClient, authInfo) {
                 else {
                     $state.go('home');
                 }
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.loginError = response.message;
             });
         },
@@ -30,8 +29,7 @@ module.exports = function($state, backendClient, authInfo) {
             .then(function(response) {
                 authInfo.user = {};
                 $state.go('login');
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.logoutError = response.message;
             });
         },
@@ -45,8 +43,7 @@ module.exports = function($state, backendClient, authInfo) {
             .then(function(response) {
                 authInfo.user = response.data;
                 $state.go('verify');
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.registerError = response.message;
             });
         },
@@ -57,8 +54,7 @@ module.exports = function($state, backendClient, authInfo) {
                 backendClient.me()
                 .then(function(response) {
                     resolve(response.data);
-                })
-                .catch(function(response) {
+                },function(response) {
                     reject(response.message);
                 });
             });
@@ -73,8 +69,7 @@ module.exports = function($state, backendClient, authInfo) {
                 backendClient.generateOtp()
                 .then(function(response) {
                     resolve(response.data);
-                })
-                .catch(function(response) {
+                },function(response) {
                     controller.generateError = response.message;
                     reject(response.message);
                 });
@@ -95,8 +90,7 @@ module.exports = function($state, backendClient, authInfo) {
                     var message = 'The provided OTP did not match the one sent in SMS';
                     controller.verifyError = message;
                 }
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.verifyError = response.message;
             });
         }

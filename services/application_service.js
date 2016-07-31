@@ -16,8 +16,7 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                     processType: processType,
                     currentStage: nextStage
                 });
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.createError = response.message;
             });
         },
@@ -37,12 +36,10 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                         processType: processType,
                         currentStage: nextStage
                     });
-                })
-                .catch(function(response) {
+                },function(response) {
                     controller.attachError = response.message;
                 });
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.attachError = response.message;
             });
         },
@@ -63,12 +60,10 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                         processType: processType,
                         currentStage: nextStage
                     });
-                })
-                .catch(function(response) {
+                },function(response) {
                     controller.attachError = response.message;
                 });
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.attachError = response.message;
             });
         },
@@ -104,8 +99,7 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                 applicationInfo.forms = undefined;
                 applicationInfo.documents = undefined;
                 $state.go('home');
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.completeError = response.message;
             });
         },

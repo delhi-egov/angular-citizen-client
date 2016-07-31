@@ -39,12 +39,10 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                         processType: processType,
                         currentStage: nextStage
                     });
-                })
-                .catch(function(response) {
+                },function(response) {
                     controller.fetchError = response.message;
                 });
-            })
-            .catch(function(response) {
+            },function(response) {
                 controller.fetchError = response.message;
             });
         },
@@ -66,8 +64,7 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                             });
                         }
                     });
-                })
-                .catch(function(response) {
+                },function(response) {
                     controller.fetchError = response.message;
                     reject(response.message);
                 });
