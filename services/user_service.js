@@ -10,13 +10,13 @@ module.exports = function($state, backendClient, authInfo) {
             .then(function(response) {
                 authInfo.user = response.data;
                 if(authInfo.user.role === 'UNVERIFIED') {
-                    $state.go('verify');
+                    $state.go('user.verify');
                 }
                 else {
-                    $state.go('home');
+                    $state.go('dashboard.home');
                 }
             },function(response) {
-                controller.loginError = response.message;
+                controller.loginError = "Incorrect credentials";
             });
         },
         //Does logout of user
@@ -28,7 +28,7 @@ module.exports = function($state, backendClient, authInfo) {
             backendClient.logout()
             .then(function(response) {
                 authInfo.user = {};
-                $state.go('login');
+                $state.go('user.login');
             },function(response) {
                 controller.logoutError = response.message;
             });
@@ -42,7 +42,7 @@ module.exports = function($state, backendClient, authInfo) {
             backendClient.register(credentials)
             .then(function(response) {
                 authInfo.user = response.data;
-                $state.go('verify');
+                $state.go('user.verify');
             },function(response) {
                 controller.registerError = response.message;
             });
@@ -84,7 +84,7 @@ module.exports = function($state, backendClient, authInfo) {
             backendClient.verifyOtp(otp)
             .then(function(response) {
                 if(response.data) {
-                    $state.go('home');
+                    $state.go('dashboard.home');
                 }
                 else {
                     var message = 'The provided OTP did not match the one sent in SMS';

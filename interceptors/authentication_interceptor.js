@@ -5,7 +5,7 @@ module.exports = function($q, $location) {
             },
             responseError: function(rejection) {
                 if (rejection.status === 401) {
-                    $location.path('/login');
+                    $location.path('/user/login');
                 }
                 return $q.reject(rejection);
             }
