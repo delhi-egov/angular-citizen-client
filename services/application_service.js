@@ -50,6 +50,13 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
             var nextState = processType + '.' + appConfig[processType].stages[currentStage].nextState;
             var nextStage = appConfig[processType].stages[currentStage].nextStage;
             var params = appConfig[processType].stages[currentStage].params;
+	    if(!controller.file) {
+                $state.go(nextState, {
+                        processType: processType,
+                        currentStage: nextStage
+                });
+                return;
+            }
             backendClient.attachDocument(applicationInfo.application.id, params.documentType, controller.file)
             .then(function(response) {
                 backendClient.changeStage(applicationInfo.application.id, currentStage)
