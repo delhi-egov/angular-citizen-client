@@ -98,7 +98,7 @@ module.exports = function($state, backendClient, authInfo, applicationInfo, appC
                 applicationInfo.application = undefined;
                 applicationInfo.forms = undefined;
                 applicationInfo.documents = undefined;
-                $state.go('home');
+                $state.go('dashboard.home');
             },function(response) {
                 controller.completeError = response.message;
             });
