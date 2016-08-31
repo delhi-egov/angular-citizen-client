@@ -53,6 +53,7 @@ module.exports = function($state, backendClient, authInfo) {
             var promise = new Promise(function(resolve, reject) {
                 backendClient.me()
                 .then(function(response) {
+		    authInfo.user = response.data;
                     resolve(response.data);
                 },function(response) {
                     reject(response.message);
