@@ -4,10 +4,12 @@ module.exports = function($q, $location, $injector) {
                 return response || $q.when(response);
             },
             responseError: function(rejection) {
-                if (rejection.status === 401 || rejection.status === 403) {
-                    // $location.path('/user/login');
-                    $injector.get('$state').go('user.login');
-                }
+	        if (rejection.status === 401) {
+	            $injector.get('$state').go('user.login');
+	        }
+	        if ((rejection.status === 403 && authInfo.user.role === 'UNVERIFIED')) {
+	            $injector.get('$state').go('user.verify');
+	        }
                 return $q.reject(rejection);
             }
         };
